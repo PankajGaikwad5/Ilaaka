@@ -1,29 +1,67 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bodoni_Moda, Instrument_Sans, Instrument_Serif, Tiro_Devanagari_Hindi } from "next/font/google";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import SmoothScroll from "@/components/SmoothScroll";
+import RevealObserver from "@/components/RevealObserver";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Headings
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+// Body and interface
+const instrumentSans = Instrument_Sans({
+  variable: "--font-instrument",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Only for the ILAAKA wordmark, which is a high-contrast serif in the studio's logo
+const bodoni = Bodoni_Moda({
+  variable: "--font-bodoni",
   subsets: ["latin"],
+  weight: "500",
 });
+
+// The "स्टूडीयोज़" half of the logo
+const tiro = Tiro_Devanagari_Hindi({
+  variable: "--font-tiro",
+  subsets: ["devanagari"],
+  weight: "400",
+});
+
+// Marks JS as available before first paint so reveal styles only hide content when they can show it again
+const JS_FLAG = `document.documentElement.classList.add("js")`;
 
 export const metadata = {
-  title: "Ilaaka Studios | Film & Television",
-  description: "Next-generation cinema, television, and visual storytelling.",
+  title: {
+    default: "Ilaaka Studios | The Creative Hood",
+    template: "%s | Ilaaka Studios",
+  },
+  description:
+    "Ilaaka Studios is a film and television studio making feature films, advertisements, short films and music videos.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
+      className={`${instrumentSerif.variable} ${instrumentSans.variable} ${bodoni.variable} ${tiro.variable} antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-screen flex flex-col bg-[#070709] text-zinc-100 selection:bg-amber-500/30 selection:text-white">
-        {children}
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
+      </head>
+      <body className="flex min-h-screen flex-col">
+        <SmoothScroll>
+          <Navbar />
+          {children}
+          <Footer />
+        </SmoothScroll>
+        <RevealObserver />
       </body>
     </html>
   );

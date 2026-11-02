@@ -120,11 +120,9 @@ export default function SlateButton() {
 ---
 
 ## 5. Studio Design System Tokens
-- **Backgrounds**: `#070709` (Cinematic Onyx)
-- **Surfaces**: `bg-zinc-900/60 border border-zinc-800`
-- **Primary Accent**: Amber / Gold (`#e5a93b`, `text-amber-400`, `bg-amber-500`)
-- **Aspect Ratios**:
-  - `aspect-video` (16:9 standard screen)
-  - `aspect-[21/9]` (2.39:1 Anamorphic Cinemascope)
-  - `aspect-[2/3]` (One-sheet theatrical poster ratio)
-
+Defined in `src/app/globals.css` (Tailwind v4 `@theme inline`), taken from the Instagram profile picture and intro card.
+- **Colours**: `paper` #fff6eb (logo cream, default canvas), `paper-deep` #f3e6d4, `ink` #16110e (wordmark black), `ink-soft` #4a3f38 (body copy), `fox` #b4542a / `fox-light` #d98a5c (mascot rust, the only accent), `bark` #3b2519, `screen` #0e0b09 (screening-room dark, only where films are shown).
+- **Type**: `font-display` Bodoni Moda (headings, wordmark), `font-hindi` Tiro Devanagari Hindi (स्टूडीयोज़ and Hindi accents, always with `lang="hi"`), `font-sans` Instrument Sans (body, UI).
+- **Long-form copy**: `prose-justify` (justified + hyphenation) for paragraphs in multi-column or narrow measures; keep short intros and captions ragged-right.
+- **Aspect ratios encode format**: `aspect-[2.39/1]` feature films, `aspect-video` ads, `aspect-[4/3]` short films, `aspect-[4/5]` / `aspect-square` music videos.
+- **Easing**: `ease-film` (in-out) and `ease-out-film`.

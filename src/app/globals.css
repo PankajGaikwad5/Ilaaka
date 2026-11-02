@@ -1,28 +1,125 @@
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: #070709;
-    --foreground: #f4f4f6;
-    --surface: #121216;
-    --surface-border: #22222a;
-    --cinema-gold: #e5a93b;
-  }
+/*
+  Palette lifted from the Instagram profile picture and the intro title card:
+  cream paper, black wordmark, and the fox mascot's rust and bark browns.
+  "screen" is the dark of a screening room, used only where films are shown.
+*/
+:root {
+  --paper: #fff6eb;
+  --paper-deep: #f3e6d4;
+  --ink: #16110e;
+  --ink-soft: #5a4f47;
+  --fox: #b4542a;
+  --fox-light: #e0915f;
+  --bark: #3b2519;
+  --screen: #0e0b09;
+  --background: var(--paper);
+  --foreground: var(--ink);
+}
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-fox: var(--fox);
+  --color-fox-light: var(--fox-light);
+  --color-bark: var(--bark);
+  --color-screen: var(--screen);
+
+  /* Bodoni is reserved for the ILAAKA wordmark; Instrument Serif for headings, Instrument Sans for the rest */
+  --font-logo: var(--font-bodoni);
+  --font-hindi: var(--font-tiro);
+  --font-serif: var(--font-instrument-serif);
+  --font-sans: var(--font-instrument);
+
+  --ease-film: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out-film: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
   html {
-    color-scheme: dark;
-    scroll-behavior: smooth;
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: var(--background);
+    background: var(--background);
     color: var(--foreground);
-    min-height: 100vh;
+    font-family: var(--font-instrument), system-ui, sans-serif;
     overflow-x: hidden;
   }
 
   ::selection {
-    background: rgba(229, 169, 59, 0.3);
-    color: #ffffff;
+    background: var(--fox);
+    color: var(--paper);
   }
+
+  :focus-visible {
+    outline: 2px solid var(--fox);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+/* Headline voice: Instrument Serif, sentence case, tight but with room for descenders */
+@utility display {
+  font-family: var(--font-instrument-serif), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+}
+
+/*
+  The one motion used across the site: content eases up into place as it enters the viewport.
+  Hidden only when JS is running (the .js class is set before paint), so nothing is lost without it.
+  RevealObserver plays the entrance with the Web Animations API; data-reveal-delay (ms) staggers siblings.
+*/
+.js [data-reveal] {
+  opacity: 0;
+  translate: 0 28px;
+}
+
+/* Page content settles in after every navigation */
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.page-in { animation: page-in 0.7s var(--ease-out-film) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; translate: none; }
+  .page-in { animation: none; }
+}
+
+/* Long-form copy: justified with hyphenation so the right edge stays even without rivers */
+@utility prose-justify {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 7 3 3;
+}
+
+/* Bottom falloff so captions stay legible on footage */
+.footage-fade {
+  background: linear-gradient(to top, color-mix(in srgb, var(--screen) 85%, transparent) 0%, color-mix(in srgb, var(--screen) 25%, transparent) 45%, transparent 70%);
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes reel-cue {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  50.1% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+.reel-cue { animation: reel-cue 2.2s var(--ease-film) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reel-cue { animation: none; }
 }
